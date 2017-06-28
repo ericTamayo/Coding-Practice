@@ -8,17 +8,20 @@ class LinkedListNode:
 		self.next  = None
 
 def kth_to_last_node(k = 0, head = None):
+	if k < 1:
+		raise ValueError ("Can not find node before 1st Node")
 	count = 1
 	temp = head
 	#Find length of list
 	while(temp.next != None):
 		count += 1
 		temp = temp.next 
-		print temp.value
+	
+	if k > count:
+		raise ValueError("Can not find value larger than list size")
 
-	print count
 	term = count - k - 1
-	print term
+	
 	returnMe = head.next
 	for i in range(0,term):
 		returnMe = returnMe.next
