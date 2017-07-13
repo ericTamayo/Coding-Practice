@@ -1,62 +1,44 @@
 def bracket_validator(codeString):
 	#Check to see if there are an even number of backets
-	if len(codeString)%2 != 0:
-		print "Odd number of Openers and Closers, must at least have even amount to be valid."
-		return False
+	#chose stack because we only care about the most recent element at a given time
+	stack = []
 
-	openArray = [None] * (len(codeString)/2)
-	closedArray = [None] * (len(codeString)/2)
-
-	closedBracket = ']'
-	closedParenthesis = ')'
-	closedCurly = '}'
-
-	count = 0 
-	openIndex = 0
-	closedIndex = 0
-	for i in codeString:
-		if i == '[' or i == '(' or i == '{':
-			openArray[openIndex] = i
-			openIndex += 1
-		if i == ']' or i == ')' or i == '}':
-			closedArray[closedIndex] = i
-			closedIndex += 1
-	print "Open:"	
-	print "\t%s"%openArray
-	print "Closed:"
-	print "\t%s"%closedArray 
-
-	for i, char in enumerate(openArray):
-		# Define Matches
-		if char == '[':
-			charToSeek = ']'
-		elif char == '(':
-			charToSeek = ')'
-		elif char == '{':
-			charToSeek = '}'
-		
-		#See if Closed Bracket is in closed array and in the correct order
-		if charToSeek == closedArray[len(closedArray) - 1 - i]:
-			print char, closedArray[len(closedArray) - 1 - i]
-			continue 
-		else:
-			print "Openers and Closers not properly nested."
-			return False
-
-	return True
+	for char in codeString:
+		if char == '[' or char == '(' or char == '{':
+			#any opener we see, we add to the stack
+			stack.append(char)
+			
+		elif char == ']' or char == ')' or char == '}':
+			#check most recently seen opener
+			mostRecent = stack.pop()
+			#look up correct closer
+			if mostRecent == '[':
+				charToSeek = ']'
+			elif mostRecent == '(':
+				charToSeek = ')'
+			elif mostRecent == '{':
+				charToSeek = '}'
+			
+			#make sure closer matches the most recent opener
+			if char == charToSeek:
+				continue 
+			else:
+				return False
+	#if stack is empty, all openers have a closer
+	return stack == []
 
 
 try:
-	codeString = '[' + '{'+ '}' + ']'
+	codeString = '[{}]'
 	print codeString
 	print bracket_validator(codeString)
 	
-	codeString = '['+'{'+']'+'}'
+	codeString = '[{]}'
 	print'\n'
 	print codeString
 	print bracket_validator(codeString)
 	
-	codeString = '[' + '{' + '}' + ']'+']'
+	codeString = '[{}]()'
 	print'\n'
 	print codeString
 	print bracket_validator(codeString)
