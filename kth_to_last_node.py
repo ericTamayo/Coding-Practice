@@ -10,6 +10,7 @@ class LinkedListNode:
 def kth_to_last_node(k = 0, head = None):
 	if k < 1:
 		raise ValueError ("Can not find node before 1st Node")
+	
 	count = 1
 	temp = head
 	#Find length of list
